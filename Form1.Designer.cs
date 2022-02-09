@@ -37,8 +37,7 @@
             this.Reset_btn = new System.Windows.Forms.Button();
             this.SelectFiles_btn = new System.Windows.Forms.Button();
             this.TotalAdded_lbl = new System.Windows.Forms.Label();
-            this.Offset_input = new System.Windows.Forms.NumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)(this.Offset_input)).BeginInit();
+            this.Offset_input = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -77,7 +76,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(395, 129);
+            this.label2.Location = new System.Drawing.Point(429, 132);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(46, 17);
             this.label2.TabIndex = 5;
@@ -86,7 +85,7 @@
             // LastOffset_lbl
             // 
             this.LastOffset_lbl.AutoSize = true;
-            this.LastOffset_lbl.Location = new System.Drawing.Point(581, 129);
+            this.LastOffset_lbl.Location = new System.Drawing.Point(588, 132);
             this.LastOffset_lbl.Name = "LastOffset_lbl";
             this.LastOffset_lbl.Size = new System.Drawing.Size(151, 17);
             this.LastOffset_lbl.TabIndex = 7;
@@ -134,10 +133,10 @@
             // 
             // Offset_input
             // 
-            this.Offset_input.Location = new System.Drawing.Point(447, 127);
+            this.Offset_input.Location = new System.Drawing.Point(482, 129);
             this.Offset_input.Name = "Offset_input";
-            this.Offset_input.Size = new System.Drawing.Size(120, 23);
-            this.Offset_input.TabIndex = 6;
+            this.Offset_input.Size = new System.Drawing.Size(100, 23);
+            this.Offset_input.TabIndex = 11;
             // 
             // Form1
             // 
@@ -160,7 +159,6 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "mvchat generator";
-            ((System.ComponentModel.ISupportInitialize)(this.Offset_input)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -177,7 +175,7 @@
         private System.Windows.Forms.Button Reset_btn;
         private System.Windows.Forms.Button SelectFiles_btn;
         private System.Windows.Forms.Label TotalAdded_lbl;
-        private System.Windows.Forms.NumericUpDown Offset_input;
+        private System.Windows.Forms.TextBox Offset_input;
     }
 }
 

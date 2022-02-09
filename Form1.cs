@@ -31,7 +31,8 @@ namespace mvchat_generator
             OpenFileDialog OFD = new OpenFileDialog
             {
                 Multiselect = true,
-                Filter = "pk3 files (*.pk3)|*.pk3|zip files (*.zip)|*.zip|All files (*.*)|*.*",
+                Filter = "All files (*.*)|*.*|pk3 files (*.pk3)|*.pk3|zip files (*.zip)|*.zip",
+                FilterIndex = 0,
                 Title = "Select files"
             };
             if (OFD.ShowDialog() == DialogResult.OK)
@@ -53,7 +54,7 @@ namespace mvchat_generator
             }
             else
             {
-                Offset = Decimal.ToInt32(Offset_input.Value);
+                Offset = Int32.Parse(Offset_input.Text);
                 LastOffset = Offset;
                 if (FilePaths.Count > 0)
                 {
@@ -105,7 +106,7 @@ namespace mvchat_generator
         {
             FilePaths.Clear();
             Sounds.Clear();
-            Offset_input.Value = 0;
+            Offset_input.Text = "";
             SelectFiles_btn.Text = "Select files";
             LastOffset_lbl.Text = "Last used offset: None";
             TotalAdded_lbl.Text = "Total added sounds: 0";
