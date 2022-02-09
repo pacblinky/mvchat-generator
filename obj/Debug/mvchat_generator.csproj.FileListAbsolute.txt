@@ -1,0 +1,15 @@
+E:\Coding\mvchat_generator\bin\Debug\mvchat_generator.exe.config
+E:\Coding\mvchat_generator\bin\Debug\mvchat_generator.exe
+E:\Coding\mvchat_generator\bin\Debug\mvchat_generator.pdb
+E:\Coding\mvchat_generator\obj\Debug\mvchat_generator.csproj.AssemblyReference.cache
+E:\Coding\mvchat_generator\obj\Debug\mvchat_generator.csproj.SuggestedBindingRedirects.cache
+E:\Coding\mvchat_generator\obj\Debug\mvchat_generator.Form1.resources
+E:\Coding\mvchat_generator\obj\Debug\mvchat_generator.Properties.Resources.resources
+E:\Coding\mvchat_generator\obj\Debug\mvchat_generator.csproj.GenerateResource.cache
+E:\Coding\mvchat_generator\obj\Debug\mvchat_generator.csproj.CoreCompileInputs.cache
+E:\Coding\mvchat_generator\obj\Debug\mvchat_generator.exe
+E:\Coding\mvchat_generator\obj\Debug\mvchat_generator.pdb
+E:\Coding\mvchat_generator\bin\Debug\mvchat_generator.exe.manifest
+E:\Coding\mvchat_generator\bin\Debug\mvchat_generator.application
+E:\Coding\mvchat_generator\obj\Debug\mvchat_generator.exe.manifest
+E:\Coding\mvchat_generator\obj\Debug\mvchat_generator.application

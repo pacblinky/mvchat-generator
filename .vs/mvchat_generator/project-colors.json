@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "fa8af178-38c1-4e2a-8d55-00eab8dcb28e": {
+      "ProjectGuid": "fa8af178-38c1-4e2a-8d55-00eab8dcb28e",
+      "DisplayName": "mvchat_generator",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
