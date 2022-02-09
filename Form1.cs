@@ -14,35 +14,40 @@ namespace mvchat_generator
 {
     public partial class Form1 : Form
     {
-        public static List<string> FilePaths;
-        public static List<Sound> Sounds;
-        public int LastOffset;
-        public int Offset;
+        private readonly List<string> _filePaths; // C# convention
+        private readonly List<Sound> _sounds;
+        private int _lastOffset; 
+        private int _offset;
 
         public Form1()
         {
-            FilePaths = new List<string>();
-            Sounds = new List<Sound>();
+            _filePaths = new List<string>();
+            _sounds = new List<Sound>();
+            
             InitializeComponent();
         }
 
         public void SelectFiles_btn_Click(object sender, EventArgs e)
         {
-            OpenFileDialog OFD = new OpenFileDialog
+            var ofd = new OpenFileDialog
             {
                 Multiselect = true,
                 Filter = "All files (*.*)|*.*|pk3 files (*.pk3)|*.pk3|zip files (*.zip)|*.zip",
                 FilterIndex = 0,
                 Title = "Select files"
             };
-            if (OFD.ShowDialog() == DialogResult.OK)
+            
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
-                foreach (string file in OFD.FileNames)
+                // can be single line
+                // ofd.FileNames.ForEach(x => _filePaths.Add(file));
+                foreach (var file in ofd.FileNames)
                 {
-                    FilePaths.Add(file);
+                    _filePaths.Add(file);
                 }
+                
                 Generate_btn.Enabled = true;
-                SelectFiles_btn.Text = "Selected " + FilePaths.Count.ToString() + " files";
+                SelectFiles_btn.Text = $"Selected {_filePaths.Count} files";
             }
         }
 
@@ -54,59 +59,82 @@ namespace mvchat_generator
             }
             else
             {
-                Offset = Int32.Parse(Offset_input.Text);
-                LastOffset = Offset;
-                if (FilePaths.Count > 0)
+                // int is short for int32 (default)
+                _offset = int.Parse(Offset_input.Text); // didn't check out ui but if you can enter strings here, use TryParse
+                _lastOffset = _offset;
+                
+                if (_filePaths.Any())
                 {
+                    // should use "using" when using IO
+                    // something like this: using (var zipArchive = ZipFile.OpenRead(FilePath))
+                    // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-statement
+                    
                     ZipArchive Archive;
-                    foreach (string FilePath in FilePaths)
+                    
+                    foreach (var filePath in _filePaths)
                     {
-                        Archive = ZipFile.OpenRead(FilePath);
-                        foreach (ZipArchiveEntry entry in Archive.Entries)
+                        Archive = ZipFile.OpenRead(filePath);
+                        
+                        foreach (var entry in Archive.Entries)
                         {
-
                             if (entry.FullName.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase) || entry.FullName.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
                             {
-                                Sounds.Add(new Sound(Offset,entry.FullName,SoundsText_check.Checked?Path.GetFileNameWithoutExtension(entry.Name):""));
-                                Offset++;
+                                _sounds.Add(new Sound 
+                                {
+                                    Offset = _offset,
+                                    Source = entry.FullName,
+                                    Text = SoundsText_check.Checked ? Path.GetFileNameWithoutExtension(entry.Name) : string.empty
+                                });
+                                
+                                _offset++;
                             }
                         }
-                        Archive.Dispose();
+                        
+                        Archive.Dispose(); // can be removed if you use "using", it'll automatically dispose
                     }
+                    
                     Save_btn.Enabled = true;
-                    TotalAdded_lbl.Text = "Total added sounds: " + Sounds.Count.ToString();
-                    LastOffset_lbl.Text = "Last used offset: " + LastOffset.ToString() + " - " + Offset.ToString() + " is used";
+                    TotalAdded_lbl.Text = $"Total added sounds: {_sounds.Count}";
+                    LastOffset_lbl.Text = $"Last used offset: {_lastOffset} - {_offset} is used";
                 }
             }
         }
 
         public void Save_btn_Click(object sender, EventArgs e)
         {
-            SaveFileDialog SFD = new SaveFileDialog
+            var sfd = new SaveFileDialog
             {
                 Title = "Save file",
                 FileName = "Untitled.mvchat",
                 Filter = "mvchat (*.mvchat)|*.mvchat|All files (*.*)|*.*"
             };
-            if(SFD.ShowDialog() == DialogResult.OK)
+            
+            if (sfd.ShowDialog() == DialogResult.OK)
             {
-                string Output = "";
-                foreach(Sound Soundd in Sounds)
+                var output = string.empty;
+                
+                foreach (var sound in _sounds)
                 {
-                    string SoundNumber = Soundd.Number.ToString();
-                    Output += SoundNumber + "\n{\n\tnumber\t\"" + SoundNumber + "\"\n\ttext\t\"" + Soundd.Text + "\"\n\n\ten\n\t{\n\t\tdefault\t\"yes\"\n\n\t\tmale\n\t\t{\n\t\t\tsound\t\"" + Soundd.Source + "\"\n\t\t}\n\t}\n}\n\n";
+                    var soundNumber = sound.Number.ToString();
+                    
+                    // nice single line, but it's unreadable --> maybe use stringbuilder?
+                    output += soundNumber + "\n{\n\tnumber\t\"" + soundNumber + "\"\n\ttext\t\"" + sound.Text + "\"\n\n\ten\n\t{\n\t\tdefault\t\"yes\"\n\n\t\tmale\n\t\t{\n\t\t\tsound\t\"" + sound.Source + "\"\n\t\t}\n\t}\n}\n\n";
                 }
-                StreamWriter SW = new StreamWriter(SFD.FileName);
-                SW.Write(Output);
-                SW.Close();
+                
+                // should use "using" when using IO
+                // something like this: using (var streamwriter = new StreamWriter(sfd.FileName))
+                // 
+                var sw = new StreamWriter(sfd.FileName);
+                sw.Write(output);
+                sw.Close(); // can be removed if you use "using"
             }
         }
 
         public void Reset_btn_Click(object sender, EventArgs e)
         {
-            FilePaths.Clear();
-            Sounds.Clear();
-            Offset_input.Text = "";
+            _filePaths.Clear();
+            _sounds.Clear();
+            Offset_input.Text = string.empty;
             SelectFiles_btn.Text = "Select files";
             LastOffset_lbl.Text = "Last used offset: None";
             TotalAdded_lbl.Text = "Total added sounds: 0";
@@ -114,18 +142,11 @@ namespace mvchat_generator
             Save_btn.Enabled = false;
         }
 
-        public class Sound
+        public class Sound // should be separated in a new file
         {
-            public int Number;
-            public string Source;
-            public string Text;
-
-            public Sound(int number, string source, string text)
-            {
-                this.Number = number;
-                this.Source = source;
-                this.Text = text;
-            }
+            public int Number { get; set; }
+            public string Source { get; set; }
+            public string Text { get; set; }
         }
     }
 }
