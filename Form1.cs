@@ -11,12 +11,12 @@ namespace mvchat_generator
     public partial class Form1 : Form
     {
         private static List<string> Files;
-        private static BindingList<VCSound> Sounds;
+        private static List<VCSound> Sounds;
 
         public Form1()
         {
             Files = new List<string>();
-            Sounds = new BindingList<VCSound>();
+            Sounds = new List<VCSound>();
             InitializeComponent();
         }
 
@@ -81,7 +81,7 @@ namespace mvchat_generator
                     TotalAdded_lbl.Text = "Total added sounds: " + Sounds.Count.ToString();
                     LastOffset_lbl.Text = "Last used offset: " + LastOffset.ToString() + " - " + Offset.ToString() + " is used";
                     Offset_input.Text = "";
-                    Sounds.OrderBy(sound => sound.Number).ToList();
+                    Sounds = Sounds.OrderBy(sound => sound.Number).ToList();
                 }
             }
         }
