@@ -54,7 +54,7 @@
             // Generate_btn
             // 
             this.Generate_btn.Enabled = false;
-            this.Generate_btn.Location = new System.Drawing.Point(559, 45);
+            this.Generate_btn.Location = new System.Drawing.Point(553, 45);
             this.Generate_btn.Name = "Generate_btn";
             this.Generate_btn.Size = new System.Drawing.Size(97, 47);
             this.Generate_btn.TabIndex = 2;
@@ -65,7 +65,7 @@
             // SoundsText_check
             // 
             this.SoundsText_check.AutoSize = true;
-            this.SoundsText_check.Location = new System.Drawing.Point(662, 59);
+            this.SoundsText_check.Location = new System.Drawing.Point(656, 59);
             this.SoundsText_check.Name = "SoundsText_check";
             this.SoundsText_check.Size = new System.Drawing.Size(238, 21);
             this.SoundsText_check.TabIndex = 3;
@@ -104,7 +104,7 @@
             // 
             // Reset_btn
             // 
-            this.Reset_btn.Location = new System.Drawing.Point(559, 181);
+            this.Reset_btn.Location = new System.Drawing.Point(553, 181);
             this.Reset_btn.Name = "Reset_btn";
             this.Reset_btn.Size = new System.Drawing.Size(97, 47);
             this.Reset_btn.TabIndex = 8;
@@ -116,7 +116,7 @@
             // 
             this.SelectFiles_btn.Location = new System.Drawing.Point(432, 45);
             this.SelectFiles_btn.Name = "SelectFiles_btn";
-            this.SelectFiles_btn.Size = new System.Drawing.Size(107, 46);
+            this.SelectFiles_btn.Size = new System.Drawing.Size(97, 47);
             this.SelectFiles_btn.TabIndex = 1;
             this.SelectFiles_btn.Text = "Select files";
             this.SelectFiles_btn.UseVisualStyleBackColor = true;
