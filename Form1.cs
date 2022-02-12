@@ -56,11 +56,11 @@ namespace mvchat_generator
             {
                 int LastOffset = Offset;
                 ZipArchive Archive;
-                foreach (string File in Files)
+                foreach (string FilePath in Files)
                 {
                     try
                     {
-                        Archive = ZipFile.OpenRead(File);
+                        Archive = ZipFile.OpenRead(FilePath);
                         foreach (ZipArchiveEntry entry in Archive.Entries)
                         {
 
@@ -72,7 +72,7 @@ namespace mvchat_generator
                         }
                         Archive.Dispose();
                     }
-                    catch (Exception ex) { MessageBox.Show(ex.Message, "Can't open selected files"); return; }
+                    catch (Exception ex) { MessageBox.Show(FilePath + "\n\n" + ex.Message, "Can't open selected file"); }
                 }
                 if (Sounds.Count > 0)
                 {
