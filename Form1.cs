@@ -14,9 +14,9 @@ namespace mvchat_generator
 
         public Form1()
         {
+            InitializeComponent();
             Files = new List<string>();
             Sounds = new List<VCSound>();
-            InitializeComponent();
         }
 
         public void SelectFiles_btn_Click(object sender, EventArgs e)
@@ -44,12 +44,12 @@ namespace mvchat_generator
         {
             if (string.IsNullOrEmpty(Offset_input.Text))
             {
-                MessageBox.Show("Offset is the number that the first sound will have like if your offset is set to 10 the first sound will be 10 and the one after will be 11", "Please enter a offset first");
+                MessageBox.Show("Offset is the number that the first sound will have like if your offset is set to 10 the first sound will be 10 and the one after will be 11", "Please enter a offset first", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             else if (int.TryParse(Offset_input.Text, out int Offset) == false)
             {
-                MessageBox.Show("The offset has to be a number", "Invalid offset");
+                MessageBox.Show("The offset has to be a number", "Invalid offset", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
             else
@@ -72,10 +72,11 @@ namespace mvchat_generator
                         }
                         Archive.Dispose();
                     }
-                    catch (Exception ex) { MessageBox.Show(FilePath + "\n\n" + ex.Message, "Can't open selected file"); }
+                    catch (Exception ex) { MessageBox.Show(FilePath + "\n\n" + ex.Message, "Can't open selected file", MessageBoxButtons.OK, MessageBoxIcon.Error); }
                 }
                 if (Sounds.Count > 0)
                 {
+                    MessageBox.Show("Added " + (Offset - LastOffset).ToString() + " sounds");
                     Save_btn.Enabled = true;
                     TotalAdded_lbl.Text = "Total added sounds: " + Sounds.Count.ToString();
                     LastOffset_lbl.Text = "Last used offset: " + LastOffset.ToString() + " - " + Offset.ToString() + " is used";
@@ -107,7 +108,7 @@ namespace mvchat_generator
                     SW.Write(Output);
                     SW.Close();
                 }
-                catch (Exception ex) { MessageBox.Show(ex.Message, "Can't save your mvchat file"); }
+                catch (Exception ex) { MessageBox.Show(ex.Message, "Can't save your mvchat file",MessageBoxButtons.OK,MessageBoxIcon.Error); }
             }
         }
 
@@ -122,19 +123,18 @@ namespace mvchat_generator
             Generate_btn.Enabled = false;
             Save_btn.Enabled = false;
         }
+    }
+    struct VCSound
+    {
+        public int Number;
+        public string Source;
+        public string Text;
 
-        public class VCSound
+        public VCSound(int number, string source, string text)
         {
-            public int Number;
-            public string Source;
-            public string Text;
-
-            public VCSound(int number, string source, string text)
-            {
-                this.Number = number;
-                this.Source = source;
-                this.Text = text;
-            }
+            this.Number = number;
+            this.Source = source;
+            this.Text = text;
         }
     }
 }
