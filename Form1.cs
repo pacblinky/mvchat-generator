@@ -111,7 +111,7 @@ namespace mvchat_generator
                     StringBuilder SB = new StringBuilder();
                     foreach (VCSound Sound in Sounds)
                     {
-                        SB.AppendFormat("{1}{0}{{{0}\tnumber\t\"{1}\"{0}\ttext\t\"{2}\"{0}{0}\ten{0}\t{{{0}\t\tdefault\t\"yes\"{0}{0}\t\tmale{0}\t\t{{{0}\t\t\tsound\t\"{3}\"{0}\t\t}}{0}\t}}{0}}}{0}{0}", Environment.NewLine,Sound.Number.ToString(),Sound.Text,Sound.Source);
+                        SB.AppendFormat("{1}{0}{{{0}\tnumber\t\"{1}\"{0}\ttext\t\"{2}\"{0}{0}\ten{0}\t{{{0}\t\tdefault\t\"yes\"{0}{0}\t\tmale{0}\t\t{{{0}\t\t\tsound\t\"{3}\"{0}\t\t}}{0}\t}}{0}}}{0}{0}", Environment.NewLine, Sound.Number.ToString(), Sound.Text, Sound.Source);
                     }
                     string Output = SB.ToString().TrimEnd(Environment.NewLine.ToCharArray());
                     SB.Clear();
