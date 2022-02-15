@@ -83,9 +83,9 @@ namespace mvchat_generator
 
                 if (Sounds.Count > 0)
                 {
-                    MessageBox.Show("Added " + (Offset - LastOffset).ToString() + " sounds", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    TotalAdded_lbl.Text = "Total added sounds: " + Sounds.Count.ToString();
-                    LastOffset_lbl.Text = "Last used offset: " + LastOffset.ToString() + " - " + Offset.ToString() + " is used";
+                    MessageBox.Show($"Added {Offset - LastOffset} sounds", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    TotalAdded_lbl.Text = $"Total added sounds: {Sounds.Count}";
+                    LastOffset_lbl.Text = $"Last used offset: {LastOffset} - {Offset} is used";
                     Offset_input.Text = "";
                     Sounds = Sounds.OrderBy(sound => sound.Number).ToList();
                 }
