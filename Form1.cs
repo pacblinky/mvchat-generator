@@ -9,13 +9,13 @@ namespace mvchat_generator
 {
     public partial class Form1 : Form
     {
-        private static List<string> Files;
+        private static List<string> FilePaths;
         private static List<VCSound> Sounds;
 
         public Form1()
         {
             InitializeComponent();
-            Files = new List<string>();
+            FilePaths = new List<string>();
             Sounds = new List<VCSound>();
         }
 
@@ -30,19 +30,23 @@ namespace mvchat_generator
             };
             if (OFD.ShowDialog() == DialogResult.OK)
             {
-                Files.Clear();
-                foreach (string file in OFD.FileNames)
+                FilePaths.Clear();
+                foreach (string FileName in OFD.FileNames)
                 {
-                    Files.Add(file);
+                    FilePaths.Add(FileName);
                 }
-                Generate_btn.Enabled = true;
-                SelectFiles_btn.Text = "Selected " + Files.Count.ToString() + " files";
+                SelectFiles_btn.Text = $"Selected {FilePaths.Count} files";
             }
         }
 
         public void Generate_btn_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(Offset_input.Text))
+            if (FilePaths.Count <= 0)
+            {
+                MessageBox.Show("Select something to generate from dummy", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            else if (string.IsNullOrEmpty(Offset_input.Text))
             {
                 MessageBox.Show("Offset is the number that the first sound will have like if your offset is set to 10 the first sound will be 10 and the one after will be 11", "Please enter a offset first", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -55,29 +59,30 @@ namespace mvchat_generator
             else
             {
                 int LastOffset = Offset;
-                ZipArchive Archive;
-                foreach (string FilePath in Files)
+                foreach (string FilePath in FilePaths)
                 {
                     try
                     {
-                        Archive = ZipFile.OpenRead(FilePath);
-                        foreach (ZipArchiveEntry entry in Archive.Entries)
+                        using (ZipArchive Archive = ZipFile.OpenRead(FilePath))
                         {
-
-                            if (entry.FullName.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase) || entry.FullName.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
+                            foreach (ZipArchiveEntry entry in Archive.Entries)
                             {
-                                Sounds.Add(new VCSound(Offset, entry.FullName, SoundsText_check.Checked ? Path.GetFileNameWithoutExtension(entry.Name) : ""));
-                                Offset++;
+
+                                if (entry.FullName.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase) || entry.FullName.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    Sounds.Add(new VCSound(Offset, entry.FullName, SoundsText_check.Checked ? Path.GetFileNameWithoutExtension(entry.Name) : ""));
+                                    Offset++;
+                                }
                             }
+                            Archive.Dispose();
                         }
-                        Archive.Dispose();
                     }
-                    catch (Exception ex) { MessageBox.Show(FilePath + "\n\n" + ex.Message, "Can't open selected file", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                    catch (Exception ex) { MessageBox.Show($"{FilePath}{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Can't open selected file", MessageBoxButtons.OK, MessageBoxIcon.Error); }
                 }
+
                 if (Sounds.Count > 0)
                 {
-                    MessageBox.Show("Added " + (Offset - LastOffset).ToString() + " sounds");
-                    Save_btn.Enabled = true;
+                    MessageBox.Show("Added " + (Offset - LastOffset).ToString() + " sounds", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     TotalAdded_lbl.Text = "Total added sounds: " + Sounds.Count.ToString();
                     LastOffset_lbl.Text = "Last used offset: " + LastOffset.ToString() + " - " + Offset.ToString() + " is used";
                     Offset_input.Text = "";
@@ -88,40 +93,46 @@ namespace mvchat_generator
 
         public void Save_btn_Click(object sender, EventArgs e)
         {
-            SaveFileDialog SFD = new SaveFileDialog
+            if (Sounds.Count <= 0)
             {
-                Title = "Save file",
-                FileName = "Untitled.mvchat",
-                Filter = "mvchat (*.mvchat)|*.mvchat|All files (*.*)|*.*"
-            };
-            if (SFD.ShowDialog() == DialogResult.OK)
+                MessageBox.Show("You have nothing to save (0 sounds)", "Generate something first", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
             {
-                string Output = "";
-                foreach (VCSound Sound in Sounds)
+                SaveFileDialog SFD = new SaveFileDialog
                 {
-                    string SoundNumber = Sound.Number.ToString();
-                    Output += SoundNumber + "\n{\n\tnumber\t\"" + SoundNumber + "\"\n\ttext\t\"" + Sound.Text + "\"\n\n\ten\n\t{\n\t\tdefault\t\"yes\"\n\n\t\tmale\n\t\t{\n\t\t\tsound\t\"" + Sound.Source + "\"\n\t\t}\n\t}\n}\n\n";
-                }
-                try
+                    Title = "Save file",
+                    FileName = "Untitled.mvchat",
+                    Filter = "mvchat (*.mvchat)|*.mvchat|All files (*.*)|*.*"
+                };
+                if (SFD.ShowDialog() == DialogResult.OK)
                 {
-                    StreamWriter SW = new StreamWriter(SFD.FileName);
-                    SW.Write(Output);
-                    SW.Close();
+                    string Output = "";
+                    foreach(VCSound Sound in Sounds)
+                    {
+                        string SoundNumber = Sound.Number.ToString();
+                        Output += SoundNumber + $"{Environment.NewLine}{{{Environment.NewLine}\tnumber\t\"{SoundNumber}\"{Environment.NewLine}\ttext\t\"{Sound.Text}\"{Environment.NewLine}{Environment.NewLine}\ten{Environment.NewLine}\t{{{Environment.NewLine}\t\tdefault\t\"yes\"{Environment.NewLine}{Environment.NewLine}\t\tmale{Environment.NewLine}\t\t{{{Environment.NewLine}\t\t\tsound\t\"{Sound.Source}\"{Environment.NewLine}\t\t}}{Environment.NewLine}\t}}{Environment.NewLine}}}{Environment.NewLine}{Environment.NewLine}";
+                    }
+                    Output += Output.TrimEnd(Environment.NewLine.ToCharArray());
+                    try
+                    {
+                        StreamWriter SW = new StreamWriter(SFD.FileName);
+                        SW.Write(Output);
+                        SW.Dispose();
+                    }
+                    catch (Exception ex) { MessageBox.Show(ex.Message, "Can't save your mvchat file", MessageBoxButtons.OK, MessageBoxIcon.Error); }
                 }
-                catch (Exception ex) { MessageBox.Show(ex.Message, "Can't save your mvchat file",MessageBoxButtons.OK,MessageBoxIcon.Error); }
             }
         }
 
         public void Reset_btn_Click(object sender, EventArgs e)
         {
-            Files.Clear();
+            FilePaths.Clear();
             Sounds.Clear();
             Offset_input.Text = "";
-            SelectFiles_btn.Text = "Select files";
+            SelectFiles_btn.Text = "Select";
             LastOffset_lbl.Text = "Last used offset: None";
             TotalAdded_lbl.Text = "Total added sounds: 0";
-            Generate_btn.Enabled = false;
-            Save_btn.Enabled = false;
         }
     }
     struct VCSound

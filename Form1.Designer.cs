@@ -53,7 +53,6 @@
             // 
             // Generate_btn
             // 
-            this.Generate_btn.Enabled = false;
             this.Generate_btn.Location = new System.Drawing.Point(553, 45);
             this.Generate_btn.Name = "Generate_btn";
             this.Generate_btn.Size = new System.Drawing.Size(97, 47);
@@ -93,7 +92,6 @@
             // 
             // Save_btn
             // 
-            this.Save_btn.Enabled = false;
             this.Save_btn.Location = new System.Drawing.Point(432, 181);
             this.Save_btn.Name = "Save_btn";
             this.Save_btn.Size = new System.Drawing.Size(97, 47);
@@ -118,7 +116,7 @@
             this.SelectFiles_btn.Name = "SelectFiles_btn";
             this.SelectFiles_btn.Size = new System.Drawing.Size(97, 47);
             this.SelectFiles_btn.TabIndex = 1;
-            this.SelectFiles_btn.Text = "Select files";
+            this.SelectFiles_btn.Text = "Select";
             this.SelectFiles_btn.UseVisualStyleBackColor = true;
             this.SelectFiles_btn.Click += new System.EventHandler(this.SelectFiles_btn_Click);
             // 
