@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -107,13 +108,13 @@ namespace mvchat_generator
                 };
                 if (SFD.ShowDialog() == DialogResult.OK)
                 {
-                    string Output = "";
-                    foreach(VCSound Sound in Sounds)
+                    StringBuilder SB = new StringBuilder();
+                    foreach (VCSound Sound in Sounds)
                     {
-                        string SoundNumber = Sound.Number.ToString();
-                        Output += SoundNumber + $"{Environment.NewLine}{{{Environment.NewLine}\tnumber\t\"{SoundNumber}\"{Environment.NewLine}\ttext\t\"{Sound.Text}\"{Environment.NewLine}{Environment.NewLine}\ten{Environment.NewLine}\t{{{Environment.NewLine}\t\tdefault\t\"yes\"{Environment.NewLine}{Environment.NewLine}\t\tmale{Environment.NewLine}\t\t{{{Environment.NewLine}\t\t\tsound\t\"{Sound.Source}\"{Environment.NewLine}\t\t}}{Environment.NewLine}\t}}{Environment.NewLine}}}{Environment.NewLine}{Environment.NewLine}";
+                        SB.AppendFormat("{1}{0}{{{0}\tnumber\t\"{1}\"{0}\ttext\t\"{2}\"{0}{0}\ten{0}\t{{{0}\t\tdefault\t\"yes\"{0}{0}\t\tmale{0}\t\t{{{0}\t\t\tsound\t\"{3}\"{0}\t\t}}{0}\t}}{0}}}{0}{0}", Environment.NewLine,Sound.Number.ToString(),Sound.Text,Sound.Source);
                     }
-                    Output += Output.TrimEnd(Environment.NewLine.ToCharArray());
+                    string Output = SB.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+                    SB.Clear();
                     try
                     {
                         StreamWriter SW = new StreamWriter(SFD.FileName);
