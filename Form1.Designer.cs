@@ -176,4 +176,3 @@
         private System.Windows.Forms.TextBox Offset_input;
     }
 }
-

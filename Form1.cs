@@ -10,8 +10,8 @@ namespace mvchat_generator
 {
     public partial class Form1 : Form
     {
-        private static List<string> FilePaths;
-        private static List<VCSound> Sounds;
+        public static List<string> FilePaths { get; set; }
+        public static List<VCSound> Sounds { get; set; }
 
         public Form1()
         {
@@ -81,7 +81,7 @@ namespace mvchat_generator
                     catch (Exception ex) { MessageBox.Show($"{FilePath}{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Can't open selected file", MessageBoxButtons.OK, MessageBoxIcon.Error); }
                 }
 
-                if (Sounds.Count > 0)
+                if (Offset != LastOffset)
                 {
                     MessageBox.Show($"Added {Offset - LastOffset} sounds", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     TotalAdded_lbl.Text = $"Total added sounds: {Sounds.Count}";
@@ -136,11 +136,11 @@ namespace mvchat_generator
             TotalAdded_lbl.Text = "Total added sounds: 0";
         }
     }
-    struct VCSound
+    public struct VCSound
     {
-        public int Number;
-        public string Source;
-        public string Text;
+        public int Number { get; set; }
+        public string Source { get; set; }
+        public string Text { get; set; }
 
         public VCSound(int number, string source, string text)
         {
