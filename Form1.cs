@@ -5,22 +5,29 @@ using System.IO;
 using System.Linq;
 using System.IO.Compression;
 using System.Windows.Forms;
+using NAudio.Wave;
+using System.ComponentModel;
 
 namespace mvchat_generator
 {
     public partial class Form1 : Form
     {
         public static List<string> FilePaths { get; set; }
-        public static List<VCSound> Sounds { get; set; }
+        public static BindingList<VCSound> Sounds { get; set; }
 
         public Form1()
         {
             InitializeComponent();
-            FilePaths = new List<string>();
-            Sounds = new List<VCSound>();
         }
 
-        public void SelectFiles_btn_Click(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            FilePaths = new List<string>();
+            Sounds = new BindingList<VCSound>();
+            SoundsList.DataSource = Sounds;
+        }
+
+        private void SelectFiles_btn_Click(object sender, EventArgs e)
         {
             OpenFileDialog OFD = new OpenFileDialog
             {
@@ -40,7 +47,7 @@ namespace mvchat_generator
             }
         }
 
-        public void Generate_btn_Click(object sender, EventArgs e)
+        private void Generate_btn_Click(object sender, EventArgs e)
         {
             if (FilePaths.Count <= 0)
             {
@@ -73,11 +80,12 @@ namespace mvchat_generator
                                 {
                                     if(NoDup_check.Checked == true)
                                     {
-                                        if(Sounds.FindIndex(Sound => Sound.Source == entry.FullName) > -1)
+                                        if(Sounds.ToList().FindIndex(Sound => Sound.Source == entry.FullName) > -1)
                                         {
-                                            return;
+                                            continue;
                                         }
                                     }
+
                                     Sounds.Add(new VCSound(Offset, entry.FullName, SoundsText_check.Checked ? Path.GetFileNameWithoutExtension(entry.Name) : ""));
                                     Offset++;
                                 }
@@ -94,12 +102,11 @@ namespace mvchat_generator
                     TotalAdded_lbl.Text = $"Total added sounds: {Sounds.Count}";
                     LastOffset_lbl.Text = $"Last used offset: {LastOffset} - {Offset} is used";
                     Offset_input.Text = "";
-                    Sounds = Sounds.OrderBy(sound => sound.Number).ToList();
                 }
             }
         }
 
-        public void Save_btn_Click(object sender, EventArgs e)
+        private void Save_btn_Click(object sender, EventArgs e)
         {
             if (Sounds.Count <= 0)
             {
@@ -133,7 +140,7 @@ namespace mvchat_generator
             }
         }
 
-        public void Reset_btn_Click(object sender, EventArgs e)
+        private void Reset_btn_Click(object sender, EventArgs e)
         {
             FilePaths.Clear();
             Sounds.Clear();
@@ -141,6 +148,26 @@ namespace mvchat_generator
             SelectFiles_btn.Text = "Select";
             LastOffset_lbl.Text = "Last used offset: None";
             TotalAdded_lbl.Text = "Total added sounds: 0";
+        }
+
+        private void AudioLimit_check_CheckedChanged(object sender, EventArgs e)
+        {
+            AudioLimit_box.Enabled = AudioLimit_check.Checked;
+        }
+
+        private static TimeSpan GetAudioLength(string FileName)
+        {
+            TimeSpan AudioTime = new TimeSpan();
+            if(FileName.EndsWith(".mp3"))
+            {
+                AudioTime = new Mp3FileReader(FileName).TotalTime;
+            }
+            else if (FileName.EndsWith(".wav"))
+            {
+                AudioTime = new AudioFileReader(FileName).TotalTime;
+            }
+
+            return AudioTime;
         }
     }
     public struct VCSound
