@@ -38,6 +38,7 @@
             this.SelectFiles_btn = new System.Windows.Forms.Button();
             this.TotalAdded_lbl = new System.Windows.Forms.Label();
             this.Offset_input = new System.Windows.Forms.TextBox();
+            this.NoDup_check = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -64,11 +65,11 @@
             // SoundsText_check
             // 
             this.SoundsText_check.AutoSize = true;
-            this.SoundsText_check.Location = new System.Drawing.Point(656, 59);
+            this.SoundsText_check.Location = new System.Drawing.Point(656, 45);
             this.SoundsText_check.Name = "SoundsText_check";
-            this.SoundsText_check.Size = new System.Drawing.Size(238, 21);
+            this.SoundsText_check.Size = new System.Drawing.Size(206, 21);
             this.SoundsText_check.TabIndex = 3;
-            this.SoundsText_check.Text = "Use sounds filename for their text";
+            this.SoundsText_check.Text = "Use sounds filename for text";
             this.SoundsText_check.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.SoundsText_check.UseVisualStyleBackColor = true;
             // 
@@ -136,12 +137,23 @@
             this.Offset_input.Size = new System.Drawing.Size(100, 23);
             this.Offset_input.TabIndex = 5;
             // 
+            // NoDup_check
+            // 
+            this.NoDup_check.AutoSize = true;
+            this.NoDup_check.Location = new System.Drawing.Point(656, 71);
+            this.NoDup_check.Name = "NoDup_check";
+            this.NoDup_check.Size = new System.Drawing.Size(165, 21);
+            this.NoDup_check.TabIndex = 10;
+            this.NoDup_check.Text = "Do not add duplicates";
+            this.NoDup_check.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1078, 566);
+            this.Controls.Add(this.NoDup_check);
             this.Controls.Add(this.Offset_input);
             this.Controls.Add(this.TotalAdded_lbl);
             this.Controls.Add(this.SelectFiles_btn);
@@ -174,5 +186,6 @@
         private System.Windows.Forms.Button SelectFiles_btn;
         private System.Windows.Forms.Label TotalAdded_lbl;
         private System.Windows.Forms.TextBox Offset_input;
+        private System.Windows.Forms.CheckBox NoDup_check;
     }
 }

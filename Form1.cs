@@ -71,6 +71,13 @@ namespace mvchat_generator
 
                                 if (entry.FullName.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase) || entry.FullName.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
                                 {
+                                    if(NoDup_check.Checked == true)
+                                    {
+                                        if(Sounds.FindIndex(Sound => Sound.Source == entry.FullName) > -1)
+                                        {
+                                            return;
+                                        }
+                                    }
                                     Sounds.Add(new VCSound(Offset, entry.FullName, SoundsText_check.Checked ? Path.GetFileNameWithoutExtension(entry.Name) : ""));
                                     Offset++;
                                 }
