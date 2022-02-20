@@ -42,11 +42,15 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.AudioLimit_check = new System.Windows.Forms.CheckBox();
             this.AudioLimit_box = new System.Windows.Forms.GroupBox();
+            this.SelectDirectory_btn = new System.Windows.Forms.Button();
             this.MaximumTime_input = new System.Windows.Forms.DateTimePicker();
             this.MaximumTime_lbl = new System.Windows.Forms.Label();
             this.MinimumTime_lbl = new System.Windows.Forms.Label();
             this.MinimumTime_input = new System.Windows.Forms.DateTimePicker();
             this.SoundsList = new System.Windows.Forms.DataGridView();
+            this.FileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.SaveDialog = new System.Windows.Forms.SaveFileDialog();
+            this.FolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.groupBox1.SuspendLayout();
             this.AudioLimit_box.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SoundsList)).BeginInit();
@@ -87,7 +91,7 @@
             // Offset_lbl
             // 
             this.Offset_lbl.AutoSize = true;
-            this.Offset_lbl.Location = new System.Drawing.Point(77, 138);
+            this.Offset_lbl.Location = new System.Drawing.Point(51, 156);
             this.Offset_lbl.Name = "Offset_lbl";
             this.Offset_lbl.Size = new System.Drawing.Size(50, 17);
             this.Offset_lbl.TabIndex = 6;
@@ -96,7 +100,7 @@
             // LastOffset_lbl
             // 
             this.LastOffset_lbl.AutoSize = true;
-            this.LastOffset_lbl.Location = new System.Drawing.Point(239, 138);
+            this.LastOffset_lbl.Location = new System.Drawing.Point(213, 156);
             this.LastOffset_lbl.Name = "LastOffset_lbl";
             this.LastOffset_lbl.Size = new System.Drawing.Size(151, 17);
             this.LastOffset_lbl.TabIndex = 8;
@@ -104,20 +108,20 @@
             // 
             // Save_btn
             // 
-            this.Save_btn.Location = new System.Drawing.Point(108, 353);
+            this.Save_btn.Location = new System.Drawing.Point(110, 428);
             this.Save_btn.Name = "Save_btn";
             this.Save_btn.Size = new System.Drawing.Size(97, 47);
-            this.Save_btn.TabIndex = 15;
+            this.Save_btn.TabIndex = 16;
             this.Save_btn.Text = "Save";
             this.Save_btn.UseVisualStyleBackColor = true;
             this.Save_btn.Click += new System.EventHandler(this.Save_btn_Click);
             // 
             // Reset_btn
             // 
-            this.Reset_btn.Location = new System.Drawing.Point(223, 353);
+            this.Reset_btn.Location = new System.Drawing.Point(223, 428);
             this.Reset_btn.Name = "Reset_btn";
             this.Reset_btn.Size = new System.Drawing.Size(97, 47);
-            this.Reset_btn.TabIndex = 16;
+            this.Reset_btn.TabIndex = 17;
             this.Reset_btn.Text = "Reset";
             this.Reset_btn.UseVisualStyleBackColor = true;
             this.Reset_btn.Click += new System.EventHandler(this.Reset_btn_Click);
@@ -135,15 +139,15 @@
             // TotalAdded_lbl
             // 
             this.TotalAdded_lbl.AutoSize = true;
-            this.TotalAdded_lbl.Location = new System.Drawing.Point(139, 413);
+            this.TotalAdded_lbl.Location = new System.Drawing.Point(142, 490);
             this.TotalAdded_lbl.Name = "TotalAdded_lbl";
             this.TotalAdded_lbl.Size = new System.Drawing.Size(150, 17);
-            this.TotalAdded_lbl.TabIndex = 17;
+            this.TotalAdded_lbl.TabIndex = 18;
             this.TotalAdded_lbl.Text = "Total added sounds: 0";
             // 
             // Offset_input
             // 
-            this.Offset_input.Location = new System.Drawing.Point(133, 135);
+            this.Offset_input.Location = new System.Drawing.Point(107, 153);
             this.Offset_input.Name = "Offset_input";
             this.Offset_input.Size = new System.Drawing.Size(100, 23);
             this.Offset_input.TabIndex = 7;
@@ -183,7 +187,7 @@
             // AudioLimit_check
             // 
             this.AudioLimit_check.AutoSize = true;
-            this.AudioLimit_check.Location = new System.Drawing.Point(80, 193);
+            this.AudioLimit_check.Location = new System.Drawing.Point(63, 207);
             this.AudioLimit_check.Name = "AudioLimit_check";
             this.AudioLimit_check.Size = new System.Drawing.Size(162, 21);
             this.AudioLimit_check.TabIndex = 9;
@@ -193,24 +197,36 @@
             // 
             // AudioLimit_box
             // 
+            this.AudioLimit_box.AutoSize = true;
+            this.AudioLimit_box.Controls.Add(this.SelectDirectory_btn);
             this.AudioLimit_box.Controls.Add(this.MaximumTime_input);
             this.AudioLimit_box.Controls.Add(this.MaximumTime_lbl);
             this.AudioLimit_box.Controls.Add(this.MinimumTime_lbl);
             this.AudioLimit_box.Controls.Add(this.MinimumTime_input);
             this.AudioLimit_box.Enabled = false;
-            this.AudioLimit_box.Location = new System.Drawing.Point(80, 211);
+            this.AudioLimit_box.Location = new System.Drawing.Point(63, 220);
             this.AudioLimit_box.Name = "AudioLimit_box";
-            this.AudioLimit_box.Size = new System.Drawing.Size(303, 100);
+            this.AudioLimit_box.Size = new System.Drawing.Size(313, 174);
             this.AudioLimit_box.TabIndex = 10;
             this.AudioLimit_box.TabStop = false;
+            // 
+            // SelectDirectory_btn
+            // 
+            this.SelectDirectory_btn.AutoSize = true;
+            this.SelectDirectory_btn.Location = new System.Drawing.Point(6, 105);
+            this.SelectDirectory_btn.Name = "SelectDirectory_btn";
+            this.SelectDirectory_btn.Size = new System.Drawing.Size(118, 47);
+            this.SelectDirectory_btn.TabIndex = 15;
+            this.SelectDirectory_btn.Text = "Select Directory";
+            this.SelectDirectory_btn.UseVisualStyleBackColor = true;
+            this.SelectDirectory_btn.Click += new System.EventHandler(this.SelectDirectory_btn_Click);
             // 
             // MaximumTime_input
             // 
             this.MaximumTime_input.CustomFormat = "HH:mm:ss";
             this.MaximumTime_input.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.MaximumTime_input.Location = new System.Drawing.Point(169, 58);
+            this.MaximumTime_input.Location = new System.Drawing.Point(179, 48);
             this.MaximumTime_input.Name = "MaximumTime_input";
-            this.MaximumTime_input.ShowCheckBox = true;
             this.MaximumTime_input.ShowUpDown = true;
             this.MaximumTime_input.Size = new System.Drawing.Size(116, 23);
             this.MaximumTime_input.TabIndex = 14;
@@ -219,7 +235,7 @@
             // MaximumTime_lbl
             // 
             this.MaximumTime_lbl.AutoSize = true;
-            this.MaximumTime_lbl.Location = new System.Drawing.Point(167, 38);
+            this.MaximumTime_lbl.Location = new System.Drawing.Point(176, 28);
             this.MaximumTime_lbl.Name = "MaximumTime_lbl";
             this.MaximumTime_lbl.Size = new System.Drawing.Size(96, 17);
             this.MaximumTime_lbl.TabIndex = 13;
@@ -228,7 +244,7 @@
             // MinimumTime_lbl
             // 
             this.MinimumTime_lbl.AutoSize = true;
-            this.MinimumTime_lbl.Location = new System.Drawing.Point(25, 38);
+            this.MinimumTime_lbl.Location = new System.Drawing.Point(25, 28);
             this.MinimumTime_lbl.Name = "MinimumTime_lbl";
             this.MinimumTime_lbl.Size = new System.Drawing.Size(93, 17);
             this.MinimumTime_lbl.TabIndex = 11;
@@ -238,7 +254,7 @@
             // 
             this.MinimumTime_input.CustomFormat = "HH:mm:ss";
             this.MinimumTime_input.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.MinimumTime_input.Location = new System.Drawing.Point(28, 58);
+            this.MinimumTime_input.Location = new System.Drawing.Point(28, 48);
             this.MinimumTime_input.Name = "MinimumTime_input";
             this.MinimumTime_input.ShowUpDown = true;
             this.MinimumTime_input.Size = new System.Drawing.Size(116, 23);
@@ -258,6 +274,25 @@
             this.SoundsList.Name = "SoundsList";
             this.SoundsList.Size = new System.Drawing.Size(561, 554);
             this.SoundsList.TabIndex = 19;
+            // 
+            // FileDialog
+            // 
+            this.FileDialog.Filter = "All files|*.*|pk3 files|*.pk3|zip files|*.zip";
+            this.FileDialog.Multiselect = true;
+            this.FileDialog.SupportMultiDottedExtensions = true;
+            this.FileDialog.Title = "Select Files";
+            // 
+            // SaveDialog
+            // 
+            this.SaveDialog.DefaultExt = "mvchat";
+            this.SaveDialog.FileName = "Untitled";
+            this.SaveDialog.Filter = "mvchat|*.mvchat|All files|*.*";
+            this.SaveDialog.Title = "Save File";
+            // 
+            // FolderDialog
+            // 
+            this.FolderDialog.Description = "Select a directory to temporary extract audio files for reading their time/length" +
+    "";
             // 
             // Form1
             // 
@@ -303,5 +338,9 @@
         private System.Windows.Forms.DateTimePicker MaximumTime_input;
         private System.Windows.Forms.GroupBox AudioLimit_box;
         private System.Windows.Forms.CheckBox AudioLimit_check;
+        private System.Windows.Forms.OpenFileDialog FileDialog;
+        private System.Windows.Forms.SaveFileDialog SaveDialog;
+        private System.Windows.Forms.FolderBrowserDialog FolderDialog;
+        private System.Windows.Forms.Button SelectDirectory_btn;
     }
 }

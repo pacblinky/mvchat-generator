@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using System.IO.Compression;
 using System.Windows.Forms;
-using NAudio.Wave;
 using System.ComponentModel;
+using NAudio.Wave;
 
 namespace mvchat_generator
 {
@@ -29,17 +29,10 @@ namespace mvchat_generator
 
         private void SelectFiles_btn_Click(object sender, EventArgs e)
         {
-            OpenFileDialog OFD = new OpenFileDialog
-            {
-                Multiselect = true,
-                Filter = "All files (*.*)|*.*|pk3 files (*.pk3)|*.pk3|zip files (*.zip)|*.zip",
-                FilterIndex = 0,
-                Title = "Select files"
-            };
-            if (OFD.ShowDialog() == DialogResult.OK)
+            if (FileDialog.ShowDialog() == DialogResult.OK)
             {
                 FilePaths.Clear();
-                foreach (string FileName in OFD.FileNames)
+                foreach (string FileName in FileDialog.FileNames)
                 {
                     FilePaths.Add(FileName);
                 }
@@ -51,7 +44,7 @@ namespace mvchat_generator
         {
             if (FilePaths.Count <= 0)
             {
-                MessageBox.Show("Select something to generate from dummy", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Select something to generate from dummy", "Nothing selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             else if (string.IsNullOrEmpty(Offset_input.Text))
@@ -67,6 +60,20 @@ namespace mvchat_generator
             else
             {
                 int LastOffset = Offset;
+                TimeSpan Minimum = new TimeSpan();
+                TimeSpan Maximum = new TimeSpan();
+                if (AudioLimit_box.Enabled)
+                {
+                    if (string.IsNullOrEmpty(FolderDialog.SelectedPath))
+                    {
+                        MessageBox.Show("Select a directory to temporary extract audio files for audio time limit checking first", "Audio time limiter is on", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    DateTime dt = MinimumTime_input.Value;
+                    DateTime dt2 = MaximumTime_input.Value;
+                    Minimum = new TimeSpan(dt.Hour, dt.Minute, dt.Second);
+                    Maximum = new TimeSpan(dt2.Hour, dt2.Minute, dt2.Second);
+                }
                 foreach (string FilePath in FilePaths)
                 {
                     try
@@ -78,9 +85,9 @@ namespace mvchat_generator
 
                                 if (entry.FullName.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase) || entry.FullName.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    if(NoDup_check.Checked)
+                                    if (NoDup_check.Checked)
                                     {
-                                        if(Sounds.ToList().FindIndex(Sound => Sound.Source == entry.FullName) > -1)
+                                        if (Sounds.ToList().FindIndex(Sound => Sound.Source == entry.FullName) > -1)
                                         {
                                             continue;
                                         }
@@ -88,8 +95,34 @@ namespace mvchat_generator
 
                                     if (AudioLimit_box.Enabled)
                                     {
-                                        // To be added
-                                        return;
+                                        string FilePath = Path.Combine(FolderDialog.SelectedPath, entry.Name);
+                                        if (!File.Exists(FilePath))
+                                        {
+                                            try
+                                            {
+                                                entry.ExtractToFile(FilePath);
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                MessageBox.Show($"Can't extract {entry.FullName} at {FilePath} for audio limit checking{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Can't extract", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                                continue;
+                                            }
+                                        }
+
+                                        try
+                                        {
+                                            TimeSpan Audiotime = new TimeSpan();
+                                            Audiotime = GetAudioTime(FilePath)
+                                            if(!(Audiotime >= Minimum && Audiotime <= Maximum))
+                                            {
+                                                continue;
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            MessageBox.Show($"\"{FilePath}\"{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Can't read audio file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            continue;
+                                        }
                                     }
 
                                     Sounds.Add(new VCSound(Offset, entry.FullName, SoundsText_check.Checked ? Path.GetFileNameWithoutExtension(entry.Name) : ""));
@@ -99,7 +132,7 @@ namespace mvchat_generator
                             Archive.Dispose();
                         }
                     }
-                    catch (Exception ex) { MessageBox.Show($"{FilePath}{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Can't open selected file", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                    catch (Exception ex) { MessageBox.Show($"\"{FilePath}\"{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Can't open selected file", MessageBoxButtons.OK, MessageBoxIcon.Error); }
                 }
 
                 if (Offset != LastOffset)
@@ -120,13 +153,7 @@ namespace mvchat_generator
             }
             else
             {
-                SaveFileDialog SFD = new SaveFileDialog
-                {
-                    Title = "Save file",
-                    FileName = "Untitled.mvchat",
-                    Filter = "mvchat (*.mvchat)|*.mvchat|All files (*.*)|*.*"
-                };
-                if (SFD.ShowDialog() == DialogResult.OK)
+                if (SaveDialog.ShowDialog() == DialogResult.OK)
                 {
                     StringBuilder SB = new StringBuilder();
                     foreach (VCSound Sound in Sounds)
@@ -137,7 +164,7 @@ namespace mvchat_generator
                     SB.Clear();
                     try
                     {
-                        StreamWriter SW = new StreamWriter(SFD.FileName);
+                        StreamWriter SW = new StreamWriter(SaveDialog.FileName);
                         SW.Write(Output);
                         SW.Dispose();
                     }
@@ -151,6 +178,11 @@ namespace mvchat_generator
             FilePaths.Clear();
             Sounds.Clear();
             Offset_input.Text = "";
+            MaximumTime_input.Text = "00:00:00";
+            MinimumTime_input.Text = "00:00:00";
+            AudioLimit_check.Checked = false;
+            NoDup_check.Checked = false;
+            SoundsText_check.Checked = false;
             SelectFiles_btn.Text = "Select";
             LastOffset_lbl.Text = "Last used offset: None";
             TotalAdded_lbl.Text = "Total added sounds: 0";
@@ -161,10 +193,10 @@ namespace mvchat_generator
             AudioLimit_box.Enabled = AudioLimit_check.Checked;
         }
 
-        private static TimeSpan GetAudioLength(string FileName)
+        private static TimeSpan GetAudioTime(string FileName)
         {
             TimeSpan AudioTime = new TimeSpan();
-            if(FileName.EndsWith(".mp3"))
+            if (FileName.EndsWith(".mp3"))
             {
                 AudioTime = new Mp3FileReader(FileName).TotalTime;
             }
@@ -174,6 +206,16 @@ namespace mvchat_generator
             }
 
             return AudioTime;
+        }
+
+        private void SelectDirectory_btn_Click(object sender, EventArgs e)
+        {
+            FolderDialog.SelectedPath = Path.GetTempPath();
+            if (FolderDialog.ShowDialog() == DialogResult.OK)
+            {
+                FolderDialog.SelectedPath = FolderDialog.SelectedPath;
+                SelectDirectory_btn.Text = $"Selected{Environment.NewLine}{FolderDialog.SelectedPath}";
+            }
         }
     }
     public struct VCSound
