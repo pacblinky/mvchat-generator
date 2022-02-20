@@ -13,7 +13,7 @@ namespace mvchat_generator
     public partial class Form1 : Form
     {
         public static List<string> FilePaths { get; set; }
-        public static BindingList<VCSound> Sounds { get; set; }
+        public static List<VCSound> Sounds { get; set; }
 
         public Form1()
         {
@@ -23,8 +23,9 @@ namespace mvchat_generator
         private void Form1_Load(object sender, EventArgs e)
         {
             FilePaths = new List<string>();
-            Sounds = new BindingList<VCSound>();
-            SoundsList.DataSource = Sounds;
+            Sounds = new List<VCSound>();
+            vCSoundBindingSource.DataSource = Sounds;
+            SoundsList.DataSource = vCSoundBindingSource;
         }
 
         private void SelectFiles_btn_Click(object sender, EventArgs e)
@@ -87,7 +88,7 @@ namespace mvchat_generator
                                 {
                                     if (NoDup_check.Checked)
                                     {
-                                        if (Sounds.ToList().FindIndex(Sound => Sound.Source == entry.FullName) > -1)
+                                        if (Sounds.FindIndex(Sound => Sound.Source == entry.FullName) > -1)
                                         {
                                             continue;
                                         }
@@ -141,6 +142,7 @@ namespace mvchat_generator
                     TotalAdded_lbl.Text = $"Total added sounds: {Sounds.Count}";
                     LastOffset_lbl.Text = $"Last used offset: {LastOffset} - {Offset} is used";
                     Offset_input.Text = "";
+                    vCSoundBindingSource.ResetBindings(false);
                 }
             }
         }
@@ -177,6 +179,7 @@ namespace mvchat_generator
         {
             FilePaths.Clear();
             Sounds.Clear();
+            vCSoundBindingSource.ResetBindings(false);
             Offset_input.Text = "";
             MaximumTime_input.Text = "00:00:00";
             MinimumTime_input.Text = "00:00:00";

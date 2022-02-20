@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.Generate_btn = new System.Windows.Forms.Button();
             this.SoundsText_check = new System.Windows.Forms.CheckBox();
@@ -51,9 +52,11 @@
             this.FileDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.FolderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.vCSoundBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
             this.AudioLimit_box.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SoundsList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vCSoundBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -313,6 +316,7 @@
             this.AudioLimit_box.ResumeLayout(false);
             this.AudioLimit_box.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SoundsList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vCSoundBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -342,5 +346,6 @@
         private System.Windows.Forms.SaveFileDialog SaveDialog;
         private System.Windows.Forms.FolderBrowserDialog FolderDialog;
         private System.Windows.Forms.Button SelectDirectory_btn;
+        private System.Windows.Forms.BindingSource vCSoundBindingSource;
     }
 }
