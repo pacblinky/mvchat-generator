@@ -95,16 +95,16 @@ namespace mvchat_generator
 
                                     if (AudioLimit_box.Enabled)
                                     {
-                                        string FilePath = Path.Combine(FolderDialog.SelectedPath, entry.Name);
-                                        if (!File.Exists(FilePath))
+                                        string ExtractPath = Path.Combine(FolderDialog.SelectedPath, entry.Name);
+                                        if (!File.Exists(ExtractPath))
                                         {
                                             try
                                             {
-                                                entry.ExtractToFile(FilePath);
+                                                entry.ExtractToFile(ExtractPath);
                                             }
                                             catch (Exception ex)
                                             {
-                                                MessageBox.Show($"Can't extract {entry.FullName} at {FilePath} for audio limit checking{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Can't extract", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                                MessageBox.Show($"Can't extract {entry.FullName} at {ExtractPath} for audio limit checking{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Can't extract", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                                 continue;
                                             }
                                         }
@@ -112,7 +112,7 @@ namespace mvchat_generator
                                         try
                                         {
                                             TimeSpan Audiotime = new TimeSpan();
-                                            Audiotime = GetAudioTime(FilePath)
+                                            Audiotime = GetAudioTime(ExtractPath);
                                             if(!(Audiotime >= Minimum && Audiotime <= Maximum))
                                             {
                                                 continue;
@@ -120,7 +120,7 @@ namespace mvchat_generator
                                         }
                                         catch (Exception ex)
                                         {
-                                            MessageBox.Show($"\"{FilePath}\"{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Can't read audio file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            MessageBox.Show($"\"{ExtractPath}\"{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Can't read audio file", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                             continue;
                                         }
                                     }
