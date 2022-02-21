@@ -2,10 +2,8 @@
 using System.Text;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.IO.Compression;
 using System.Windows.Forms;
-using System.ComponentModel;
 using NAudio.Wave;
 
 namespace mvchat_generator
@@ -26,6 +24,7 @@ namespace mvchat_generator
             Sounds = new List<VCSound>();
             vCSoundBindingSource.DataSource = Sounds;
             SoundsList.DataSource = vCSoundBindingSource;
+            SoundsList.Columns["ID"].Visible = false;
         }
 
         private void SelectFiles_btn_Click(object sender, EventArgs e)
@@ -114,7 +113,7 @@ namespace mvchat_generator
                                         {
                                             TimeSpan Audiotime = new TimeSpan();
                                             Audiotime = GetAudioTime(ExtractPath);
-                                            if(!(Audiotime >= Minimum && Audiotime <= Maximum))
+                                            if (!(Audiotime >= Minimum && Audiotime <= Maximum))
                                             {
                                                 continue;
                                             }
@@ -220,18 +219,46 @@ namespace mvchat_generator
                 SelectDirectory_btn.Text = $"Selected{Environment.NewLine}{FolderDialog.SelectedPath}";
             }
         }
+
+        private void SortList_btn_Click(object sender, EventArgs e)
+        {
+            if (Sounds.Count >= 2)
+            {
+                Sounds.Sort((x, y) => x.Number.CompareTo(y.Number));
+                vCSoundBindingSource.ResetBindings(false);
+            }
+        }
+
+        private void Delete_btn_Click(object sender, EventArgs e)
+        {
+            if (SoundsList.SelectedRows.Count > 0)
+            {
+                foreach (DataGridViewRow Row in SoundsList.SelectedRows)
+                {
+                    if (Row.Cells["ID"].Value != null)
+                    {
+                        int ID = (int)Row.Cells["ID"].Value;
+                        Sounds.RemoveAt(Sounds.FindIndex(x => x.ID == ID));
+                    }
+                }
+                vCSoundBindingSource.ResetBindings(false);
+            }
+        }
     }
     public struct VCSound
     {
+        private static int LastID = 0;
         public int Number { get; set; }
         public string Source { get; set; }
         public string Text { get; set; }
+        public int ID { get; set; }
 
         public VCSound(int number, string source, string text)
         {
             this.Number = number;
             this.Source = source;
             this.Text = text;
+            this.ID = LastID++;
         }
     }
 }

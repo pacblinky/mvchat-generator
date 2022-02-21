@@ -53,6 +53,8 @@
             this.SaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.FolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.vCSoundBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.Delete_btn = new System.Windows.Forms.Button();
+            this.SortList_btn = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.AudioLimit_box.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SoundsList)).BeginInit();
@@ -267,15 +269,17 @@
             // SoundsList
             // 
             this.SoundsList.AllowDrop = true;
-            this.SoundsList.AllowUserToOrderColumns = true;
+            this.SoundsList.AllowUserToAddRows = false;
+            this.SoundsList.AllowUserToDeleteRows = false;
             this.SoundsList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.SoundsList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.SoundsList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.SoundsList.Location = new System.Drawing.Point(505, 12);
+            this.SoundsList.Location = new System.Drawing.Point(505, 41);
             this.SoundsList.Name = "SoundsList";
-            this.SoundsList.Size = new System.Drawing.Size(561, 554);
+            this.SoundsList.ShowEditingIcon = false;
+            this.SoundsList.Size = new System.Drawing.Size(561, 525);
             this.SoundsList.TabIndex = 19;
             // 
             // FileDialog
@@ -297,12 +301,34 @@
             this.FolderDialog.Description = "Select a directory to temporary extract audio files for reading their time/length" +
     "";
             // 
+            // Delete_btn
+            // 
+            this.Delete_btn.Location = new System.Drawing.Point(586, 8);
+            this.Delete_btn.Name = "Delete_btn";
+            this.Delete_btn.Size = new System.Drawing.Size(118, 27);
+            this.Delete_btn.TabIndex = 21;
+            this.Delete_btn.Text = "Delete Selected";
+            this.Delete_btn.UseVisualStyleBackColor = true;
+            this.Delete_btn.Click += new System.EventHandler(this.Delete_btn_Click);
+            // 
+            // SortList_btn
+            // 
+            this.SortList_btn.Location = new System.Drawing.Point(505, 8);
+            this.SortList_btn.Name = "SortList_btn";
+            this.SortList_btn.Size = new System.Drawing.Size(75, 27);
+            this.SortList_btn.TabIndex = 22;
+            this.SortList_btn.Text = "Sort List";
+            this.SortList_btn.UseVisualStyleBackColor = true;
+            this.SortList_btn.Click += new System.EventHandler(this.SortList_btn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1078, 566);
+            this.Controls.Add(this.SortList_btn);
+            this.Controls.Add(this.Delete_btn);
             this.Controls.Add(this.SoundsList);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -347,5 +373,7 @@
         private System.Windows.Forms.FolderBrowserDialog FolderDialog;
         private System.Windows.Forms.Button SelectDirectory_btn;
         private System.Windows.Forms.BindingSource vCSoundBindingSource;
+        private System.Windows.Forms.Button Delete_btn;
+        private System.Windows.Forms.Button SortList_btn;
     }
 }
