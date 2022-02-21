@@ -268,7 +268,6 @@
             // 
             // SoundsList
             // 
-            this.SoundsList.AllowDrop = true;
             this.SoundsList.AllowUserToAddRows = false;
             this.SoundsList.AllowUserToDeleteRows = false;
             this.SoundsList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 

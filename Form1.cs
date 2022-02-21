@@ -142,6 +142,7 @@ namespace mvchat_generator
                     LastOffset_lbl.Text = $"Last used offset: {LastOffset} - {Offset} is used";
                     Offset_input.Text = "";
                     vCSoundBindingSource.ResetBindings(false);
+                    SoundsList.ClearSelection();
                 }
             }
         }
@@ -237,11 +238,11 @@ namespace mvchat_generator
                 {
                     if (Row.Cells["ID"].Value != null)
                     {
-                        int ID = (int)Row.Cells["ID"].Value;
-                        Sounds.RemoveAt(Sounds.FindIndex(x => x.ID == ID));
+                        Sounds.RemoveAt(Sounds.FindIndex(x => x.ID == (int)Row.Cells["ID"].Value));
                     }
                 }
                 vCSoundBindingSource.ResetBindings(false);
+                TotalAdded_lbl.Text = $"Total added sounds: {Sounds.Count}";
             }
         }
     }
